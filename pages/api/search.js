@@ -3,70 +3,33 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  const { query, limit = 30, filter = "all", genre = "", era = "" } = req.query;
+  const { query } = req.query;
   if (!query) {
     return res.status(400).json({ error: "Query parameter is required" });
   }
 
   try {
-    const clientId = process.env.SPOTIFY_CLIENT_ID;
-    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-
-    // Request an access token from Spotify
-    const authResponse = await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
-      },
-      body: "grant_type=client_credentials",
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track`, {
+      headers: { Authorization: `Bearer ${process.env.SPOTIFY_ACCESS_TOKEN}` },
     });
 
-    const authData = await authResponse.json();
-    const accessToken = authData.access_token;
+    const data = await response.json();
+    console.log("Spotify API Response:", JSON.stringify(data, null, 2)); // Debugging log
 
-    // Build search query
-    let searchQuery = encodeURIComponent(query);
-    if (genre) {
-      searchQuery += ` genre:${genre}`;
+    if (!data.tracks || !data.tracks.items || data.tracks.items.length === 0) {
+      return res.status(404).json({ error: "No tracks found", spotifyResponse: data });
     }
 
-    // Apply filters in the search request
-    let searchURL = `https://api.spotify.com/v1/search?q=${searchQuery}&type=track&limit=${limit}`;
-
-    if (filter === "popularity") {
-      searchURL += "&sort=popularity";
-    } else if (filter === "recent") {
-      searchURL += "&sort=newest";
-    }
-
-    // Apply era filter
-    if (era) {
-      searchURL += `&year=${era}`;
-    }
-
-    // Make the request to Spotify API
-    const searchResponse = await fetch(searchURL, {
-      headers: { Authorization: `Bearer ${accessToken}` },
+    res.status(200).json({
+      tracks: data.tracks.items.map(track => ({
+        id: track.id,
+        name: track.name,
+        artist: track.artists.map(a => a.name).join(", "),
+        albumArt: track.album.images[0]?.url || ""
+      }))
     });
-
-    const searchData = await searchResponse.json();
-    if (!searchData.tracks) {
-      return res.status(404).json({ error: "No tracks found" });
-    }
-
-    const tracks = searchData.tracks.items.map((track) => ({
-      id: track.id,
-      name: track.name,
-      artist: track.artists.map((a) => a.name).join(", "),
-      albumArt: track.album.images[0]?.url || "",
-    }));
-
-    // ✅ Missing Closing Brackets Were Here!
-    res.status(200).json({ tracks });
-
   } catch (error) {
-    console.error("Spotify API Error:", error);
+    console.error("API Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
