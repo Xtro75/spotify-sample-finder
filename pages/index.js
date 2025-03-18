@@ -9,6 +9,7 @@ export default function Home() {
   const searchTracks = async () => {
     if (!query) return;
 
+    // Construct the API URL with filters
     let apiUrl = `/api/search?query=${query}`;
     if (genre !== "all") apiUrl += `&genre=${genre}`;
     if (year !== "all") apiUrl += `&year=${year}`;
@@ -76,13 +77,31 @@ export default function Home() {
         Search
       </button>
 
-      {/* ✅ Display Results */}
-      <div style={{ marginTop: "20px", display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+      {/* ✅ Display Results in a List Format */}
+      <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
         {results.map((track) => (
-          <div key={track.id} style={{ marginBottom: "20px", textAlign: "center", width: "200px", margin: "10px" }}>
-            <img src={track.albumArt} alt={track.name} width="150" height="150" style={{ borderRadius: "10px" }} />
-            <p style={{ fontSize: "14px", fontWeight: "bold" }}>{track.name}</p>
-            <p style={{ fontSize: "12px", color: "#555" }}>{track.artist}</p>
+          <div 
+            key={track.id} 
+            style={{ 
+              display: "flex", 
+              alignItems: "center", 
+              width: "80%", 
+              maxWidth: "600px", 
+              padding: "10px", 
+              borderBottom: "1px solid #ddd" 
+            }}
+          >
+            <img 
+              src={track.albumArt} 
+              alt={track.name} 
+              width="60" 
+              height="60" 
+              style={{ borderRadius: "5px", marginRight: "15px" }} 
+            />
+            <div style={{ textAlign: "left" }}>
+              <p style={{ fontSize: "16px", fontWeight: "bold", margin: "0" }}>{track.name}</p>
+              <p style={{ fontSize: "14px", color: "#555", margin: "0" }}>{track.artist}</p>
+            </div>
           </div>
         ))}
       </div>
