@@ -1,0 +1,114 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Center the page */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #121212;
+  color: white;
+}
+
+/* Main container */
+.container {
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+  height: 90vh; /* Keep the full viewport height */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Search bar */
+.search-container {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  background: #121212; /* Keeps it visible */
+  padding: 10px;
+  z-index: 100;
+  flex-shrink: 0; /* Prevents it from being resized */
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Button */
+button {
+  background-color: #1DB954;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #17a74b;
+}
+
+/* List of results */
+.track-list {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  background: #1e1e1e;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  gap: 15px;
+}
+
+.track img {
+  width: 100px;  /* Increase from 50px to 100px */
+  height: 100px; /* Keep aspect ratio */
+  border-radius: 10px; /* Softer corners */
+}
+
+.track-info {
+  text-align: left;
+}
+
+/* Results Container - Scrollable */
+.results-container {
+  flex-grow: 1; /* Takes up remaining space */
+  overflow-y: auto; /* Enables scrolling */
+  max-height: 70vh; /* Keeps it from pushing the search bar out */
+}
+
+/* Make Filters Look Better */
+.search-container select {
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  background-color: #1e1e1e;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.search-container select:hover {
+  background-color: #333;
+}
