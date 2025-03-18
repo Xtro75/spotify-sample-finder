@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -19,9 +19,14 @@ export default function Home() {
   };
 
   return (
-    <div style={{ fontFamily: "Arial, sans-serif", padding: "20px" }}>
+    <div style={{
+      fontFamily: "Arial, sans-serif",
+      padding: "20px",
+      backgroundColor: "#f4f4f4",
+      minHeight: "100vh"
+    }}>
       
-      {/* ✅ Fixed Header Section */}
+      {/* ✅ Fixed Header */}
       <div style={{
         position: "fixed",
         top: "0",
@@ -34,30 +39,30 @@ export default function Home() {
         textAlign: "center"
       }}>
         <h1 style={{
-          fontSize: "1.5rem",
+          fontSize: "1.8rem",
           fontWeight: "bold",
           color: "#1DB954",
           marginBottom: "10px",
-          textTransform: "uppercase"
+          textTransform: "uppercase",
+          letterSpacing: "1px"
         }}>
-          🎵 Welcome To Alpha Centori Audio Research Labs Sampler Finder 🎵
+          🎵 Welcome to Alpha Centori Audio Research Labs 🎵
         </h1>
 
         {/* ✅ Search Bar & Filters */}
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexWrap: "wrap", gap: "8px", marginTop: "10px" }}>
           <input 
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for tracks..."
-            style={{ padding: "10px", width: "40%", borderRadius: "5px", border: "1px solid #ccc" }}
+            style={{ padding: "10px", width: "250px", borderRadius: "5px", border: "1px solid #ccc" }}
           />
 
-          {/* ✅ Genre Filter */}
           <select 
             value={genre} 
             onChange={(e) => setGenre(e.target.value)}
-            style={{ padding: "10px", borderRadius: "5px" }}
+            style={{ padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
           >
             <option value="all">All Genres</option>
             <option value="hiphop">Hip-Hop</option>
@@ -67,11 +72,10 @@ export default function Home() {
             <option value="electronic">Electronic</option>
           </select>
 
-          {/* ✅ Year Filter */}
           <select 
             value={year} 
             onChange={(e) => setYear(e.target.value)}
-            style={{ padding: "10px", borderRadius: "5px" }}
+            style={{ padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
           >
             <option value="all">All Years</option>
             <option value="1960s">1960s</option>
@@ -84,43 +88,56 @@ export default function Home() {
 
           <button 
             onClick={searchTracks} 
-            style={{ padding: "10px 20px", backgroundColor: "#1DB954", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer" }}
+            style={{ padding: "10px 15px", backgroundColor: "#1DB954", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer" }}
           >
             Search
           </button>
         </div>
       </div>
 
-      {/* ✅ Spacing to Prevent Content From Overlapping */}
-      <div style={{ marginTop: "120px", textAlign: "center" }}>
-
-        {/* ✅ Display Results in a List Format */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          {results.map((track) => (
-            <div 
-              key={track.id} 
-              style={{ 
-                display: "flex", 
-                alignItems: "center", 
-                width: "80%", 
-                maxWidth: "600px", 
-                padding: "10px", 
-                borderBottom: "1px solid #ddd" 
-              }}
-            >
-              <img 
-                src={track.albumArt} 
-                alt={track.name} 
-                width="60" 
-                height="60" 
-                style={{ borderRadius: "5px", marginRight: "15px" }} 
-              />
-              <div style={{ textAlign: "left" }}>
-                <p style={{ fontSize: "16px", fontWeight: "bold", margin: "0" }}>{track.name}</p>
-                <p style={{ fontSize: "14px", color: "#555", margin: "0" }}>{track.artist}</p>
+      {/* ✅ Spacing to Prevent Overlap */}
+      <div style={{ marginTop: "120px" }}>
+        
+        {/* ✅ Display Results in a Clean List Format */}
+        <div style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          maxWidth: "700px",
+          margin: "auto",
+          backgroundColor: "#fff",
+          padding: "15px",
+          borderRadius: "10px",
+          boxShadow: "0px 4px 10px rgba(0,0,0,0.1)"
+        }}>
+          {results.length === 0 ? (
+            <p style={{ color: "#555", fontSize: "14px" }}>No results yet. Start searching!</p>
+          ) : (
+            results.map((track) => (
+              <div 
+                key={track.id} 
+                style={{ 
+                  display: "flex", 
+                  alignItems: "center", 
+                  width: "100%", 
+                  padding: "10px", 
+                  borderBottom: "1px solid #ddd" 
+                }}
+              >
+                <img 
+                  src={track.albumArt} 
+                  alt={track.name} 
+                  width="60" 
+                  height="60" 
+                  style={{ borderRadius: "5px", marginRight: "15px" }} 
+                />
+                <div style={{ textAlign: "left" }}>
+                  <p style={{ fontSize: "16px", fontWeight: "bold", margin: "0" }}>{track.name}</p>
+                  <p style={{ fontSize: "14px", color: "#555", margin: "0" }}>{track.artist}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>
